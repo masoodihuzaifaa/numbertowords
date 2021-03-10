@@ -21,10 +21,10 @@ var words = [20]string{
 	"thirteen",
 	"fourteen",
 	"fifteen",
-	"Sixteen",
+	"sixteen",
 	"seventeen",
-	"Eighteen",
-	"Ninteen",
+	"eighteen",
+	"nineteen",
 }
 
 var tenwords = [10]string{
@@ -40,36 +40,39 @@ var tenwords = [10]string{
 	"ninety",
 }
 
-const MaxNumber = 99999
+// maxNumber is the largest number that this version
+// of numberstowords can convert into words.
+const maxNumber = 99999
 
-//the number to words package will convert the input number to string
-//Covert
+// Convert converts an integer number between 0 and MaxNumber to words.
+// If passed a number outside the valid range, it returns an error.
 func Convert(number int) (string, error) {
-	if number < 0 || number > 99999 {
-		return "", errors.New("The number is not valid")
+	if number < 0 || number > maxNumber {
+		return "", errors.New("number not in valid range")
 	}
 
 	result := ""
-	thousends := number / 1000
-	if thousends > 0 {
-		result, _ = Convert(thousends)
-		result = result + " thousend"
+
+	thousands := number / 1000
+	if thousands > 0 {
+		result, _ = Convert(thousands)
+		result = result + " thousand "
 		number = number % 1000
 		if number == 0 {
 			return result, nil
-
 		}
 	}
 
 	hundreds := number / 100
 
 	if hundreds > 0 {
-		result = words[hundreds] + " hundred "
+		result = result + words[hundreds] + " hundred "
 		number = number % 100
 		if number == 0 {
 			return result, nil
 		}
 	}
+
 	tens := number / 10
 	units := number % 10
 
@@ -80,5 +83,7 @@ func Convert(number int) (string, error) {
 	if units == 0 {
 		return result + tenwords[tens], nil
 	}
-	return result + tenwords[tens] + "" + words[units], nil
+
+	return result + tenwords[tens] + " " + words[units], nil
+
 }
